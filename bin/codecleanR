@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "codecleanR"
+
+require "codecleanR"
+
+hello = CodecleanR::Hello.new
+hello.world
