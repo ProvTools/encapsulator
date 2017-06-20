@@ -1,9 +1,11 @@
 module CodecleanR
   class VertexCounter < ProvJSONParser
     attr_reader :map
+    attr_reader :files
 
     def initialize
       @map = Hash.new(0)
+      @files = Array.new
     end
 
     def add key
@@ -12,6 +14,9 @@ module CodecleanR
 
     def entity k, v
       self.add v['rdt:type']
+      if v['rdt:type'] == 'File'
+        @files << v['rdt:name']
+      end
     end
 
     def activity k, v
@@ -27,6 +32,9 @@ module CodecleanR
       @map = @map.sort_by { |key, value| value }.reverse
       @map.each do |key, value|
         puts "#{key}:#{value}"
+      end
+      @files.each do |value|
+        puts "#{value}"
       end
     end
   end
