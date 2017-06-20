@@ -4,5 +4,10 @@ require "codecleanR"
 
 require "codecleanR"
 
-hello = CodecleanR::Hello.new
-hello.world
+if ARGV[0] == '--info'
+  CodecleanR::EdgeCounter.new.read_json_file(ARGV[1]).show
+  CodecleanR::VertexCounter.new.read_json_file(ARGV[1]).show
+else
+  puts "USAGE\n\n"
+  puts '--info <path to provjson> display information about the provenance graph'
+end
