@@ -7,7 +7,17 @@ require "codecleanR"
 if ARGV[0] == '--info'
   CodecleanR::EdgeCounter.new.read_json_file(ARGV[1]).show
   CodecleanR::VertexCounter.new.read_json_file(ARGV[1]).show
+  CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).information
+elsif ARGV[0] == '--jpg'
+  CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
+elsif ARGV[0] == '--png'
+  CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
+elsif ARGV[0] == '--svg'
+  CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).svg
 else
   puts "USAGE\n\n"
   puts '--info <path to provjson> display information about the provenance graph'
+  puts '--jpg <path to provjson> output graph as jpg'
+  puts '--png <path to provjson> output graph as png'
+  puts '--svg <path to provjson> output graph as svg'
 end
