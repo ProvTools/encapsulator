@@ -2,6 +2,7 @@ require 'rgl/adjacency'
 require 'rgl/dot'
 require 'rgl/topsort'
 require 'rgl/transitivity'
+require 'rgl/traversal'
 
 module CodecleanR
   class ProvJSONtoRGL < ProvJSONParser
@@ -24,7 +25,7 @@ module CodecleanR
     end
 
     def wasInformedBy k, v
-      @dg.add_edge v['prov:informed'], v['prov:informant']
+      #@dg.add_edge v['prov:informed'], v['prov:informant']
     end
 
     def wasAssociatedWith k, v
@@ -33,7 +34,9 @@ module CodecleanR
     end
 
     def information
-      str = "Graph:\n"
+      str = "\n------\n"
+      str += "Graph:\n"
+      str += "------\n"
       if @dg.directed?
         str += "directed\n"
       else
@@ -62,6 +65,18 @@ module CodecleanR
 
     def png
       @dg.write_to_graphic_file('png')
+    end
+
+    def ancestor file, map
+      tree = @dg.bfs_search_tree_from(file)
+      g = @dg.vertices_filtered_by {|v| tree.has_vertex? v}
+      g.write_to_graphic_file('jpg')
+      list = g.vertices
+      list.delete_if { |v| !v.include?('p') }
+      puts list
+      list.each do |v|
+        puts map[v]
+      end
     end
   end
 end

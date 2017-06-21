@@ -2,10 +2,12 @@ module CodecleanR
   class VertexCounter < ProvJSONParser
     attr_reader :map
     attr_reader :files
+    attr_reader :instructions
 
     def initialize
       @map = Hash.new(0)
-      @files = Array.new
+      @files = Hash.new
+      @instructions = Hash.new
     end
 
     def add key
@@ -15,12 +17,15 @@ module CodecleanR
     def entity k, v
       self.add v['rdt:type']
       if v['rdt:type'] == 'File'
-        @files << v['rdt:name']
+        @files[k]=v['rdt:name']
       end
     end
 
     def activity k, v
       self.add v['rdt:type']
+      if v['rdt:type'] == 'Operation'
+        @instructions[k]=v['rdt:name']
+      end
     end
 
     def agent k, v
@@ -33,8 +38,8 @@ module CodecleanR
       @map.each do |key, value|
         puts "#{key}:#{value}"
       end
-      @files.each do |value|
-        puts "#{value}"
+      @files.each do |key, value|
+        puts "#{key}:#{value}"
       end
     end
   end
