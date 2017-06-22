@@ -11,6 +11,8 @@ git clone https://github.com/tfjmp/codecleanR.git
 cd codecleanR
 rake install
 codecleanR -h
+# try it out!
+codecleanR --code ./json/messy_ddg.json d17
 ```
 
 ## USAGE
@@ -20,5 +22,4 @@ codecleanR -h
 codecleanR --info <your_RDT_prov.json>
 # select an output node to generate the code to be generate
 codecleanR --code <your_RDT_prov.json> <output_node_id>
-
 ```
