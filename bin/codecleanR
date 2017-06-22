@@ -14,6 +14,9 @@ elsif ARGV[0] == '--png'
   CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
 elsif ARGV[0] == '--svg'
   CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).svg
+elsif ARGV[0] == '--code'
+  v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
+  CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).ancestor ARGV[2], v.instructions
 else
   puts "USAGE\n\n"
   puts '--info <path to provjson> display information about the provenance graph'
@@ -21,5 +24,3 @@ else
   puts '--png <path to provjson> output graph as png'
   puts '--svg <path to provjson> output graph as svg'
 end
-v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
-CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).ancestor 'd2', v.instructions
