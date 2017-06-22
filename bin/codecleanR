@@ -23,4 +23,5 @@ else
   puts '--jpg <path to provjson> output graph as jpg'
   puts '--png <path to provjson> output graph as png'
   puts '--svg <path to provjson> output graph as svg'
+  puts '--code <path to provjson> <output id> output code needed to generate the node'
 end
