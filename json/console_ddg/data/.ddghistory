@@ -1,0 +1,16 @@
+library(RDataTracker)
+ddg.init(ddgdir="console_ddg")
+##-ddg-- Thu Jun 22 12:20:56 2017 ------##
+data(iris)
+write.csv(iris,'my_data.csv')
+x = read.csv('my_data.csv')
+y = x
+y[5,3] = 500
+str(x)
+str(y)
+pdf('cor_plot.pdf')
+str(y)
+plot(Sepal.Length~Sepal.Width, data = y)
+abline(v=500)
+dev.off()
+ddg.save()

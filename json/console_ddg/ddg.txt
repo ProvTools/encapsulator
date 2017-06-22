@@ -1,0 +1,60 @@
+Architecture="x86_64"
+OperatingSystem="unix"
+Language="R"
+LanguageVersion="R version 3.4.0 (2017-04-21)"
+RDataTrackerVersion="2.26.1"
+ Script="Console"
+ProcessFileTimestamp="2017-06-22T12.20.57EDT"
+WorkingDirectory="/Users/hermes/Labs/HF/projects/e2ep/projects/codecleanR/json"
+DDGDirectory="console_ddg"
+DateTime="2017-06-22T12.20.57EDT"
+InstalledPackages="base 3.4.0, datasets 3.4.0, graphics 3.4.0, grDevices 3.4.0, methods 3.4.0, RDataTracker 2.26.1, stats 3.4.0, utils 3.4.0"
+14
+Start p1 "1-Console" Value="Console" Time="0.407" Script="NA" Pos="NA";
+Operation p2 "2-data(iris)" Value="data(iris)" Time="0.485" Script="-1" Pos="1,1,1,10";
+CF p1 p2
+Snapshot d1 "1-iris [ENV]" Value="data/1-iris.csv" ValType="\"{\"container\":\"data_frame\", \"dimension\":[150,5], \"type\":[\"numeric\",\"numeric\",\"numeric\",\"numeric\",\"factor\"]}\"" Time="2017-06-22T12.23.12EDT";
+DF d1 p2
+Operation p3 "3-write.csv(iris, \"my_data.csv\")" Value="write.csv(iris, \"my_data.csv\")" Time="0.67" Script="-1" Pos="2,1,2,29";
+CF p2 p3
+DF d1 p3
+File d2 "2-my_data.csv" Value="data/2-my_data.csv" ValType="\"{\"container\":\"vector\", \"dimension\":[1], \"type\":[\"character\"]}\"" Time="2017-06-22T12.23.12EDT" Location="/Users/hermes/Labs/HF/projects/e2ep/projects/codecleanR/json/my_data.csv";
+DF p3 d2
+Operation p4 "4-x = read.csv(\"my_data.csv\")" Value="x = read.csv(\"my_data.csv\")" Time="0.943" Script="-1" Pos="3,1,3,1";
+CF p3 p4
+File d3 "3-my_data.csv" Value="data/3-my_data.csv" ValType="\"{\"container\":\"vector\", \"dimension\":[1], \"type\":[\"character\"]}\"" Time="2017-06-22T12.23.12EDT" Location="/Users/hermes/Labs/HF/projects/e2ep/projects/codecleanR/json/my_data.csv";
+DF d3 p4
+Snapshot d4 "4-x" Value="data/4-x.csv" ValType="\"{\"container\":\"data_frame\", \"dimension\":[150,6], \"type\":[\"integer\",\"numeric\",\"numeric\",\"numeric\",\"numeric\",\"factor\"]}\"" Time="2017-06-22T12.23.12EDT";
+DF p4 d4
+Operation p5 "5-y = x" Value="y = x" Time="1.115" Script="-1" Pos="3,5,3,27";
+CF p4 p5
+DF d4 p5
+Operation p6 "6-y[5, 3] = 500" Value="y[5, 3] = 500" Time="1.129" Script="-1" Pos="4,1,4,1";
+CF p5 p6
+Snapshot d5 "5-y [ENV]" Value="data/5-y.csv" ValType="\"{\"container\":\"data_frame\", \"dimension\":[150,6], \"type\":[\"integer\",\"numeric\",\"numeric\",\"numeric\",\"numeric\",\"factor\"]}\"" Time="2017-06-22T12.23.12EDT";
+DF d5 p6
+Snapshot d6 "6-y" Value="data/6-y.csv" ValType="\"{\"container\":\"data_frame\", \"dimension\":[150,6], \"type\":[\"integer\",\"numeric\",\"numeric\",\"numeric\",\"numeric\",\"factor\"]}\"" Time="2017-06-22T12.23.12EDT";
+DF p6 d6
+Operation p7 "7-str(x)" Value="str(x)" Time="1.156" Script="-1" Pos="4,5,4,5";
+CF p6 p7
+DF d4 p7
+Operation p8 "8-str(y)" Value="str(y)" Time="1.174" Script="-1" Pos="5,1,5,6";
+CF p7 p8
+DF d6 p8
+Operation p9 "9-pdf(\"cor_plot.pdf\")" Value="pdf(\"cor_plot.pdf\")" Time="1.186" Script="-1" Pos="5,8,5,8";
+CF p8 p9
+Operation p10 "10-str(y)" Value="str(y)" Time="1.191" Script="-1" Pos="5,10,5,12";
+CF p9 p10
+DF d6 p10
+Operation p11 "11-plot(Sepal.Length ~ Sepal.Width, data = y)" Value="plot(Sepal.Length ~ Sepal.Width, data = y)" Time="1.205" Script="-1" Pos="6,1,6,6";
+CF p10 p11
+DF d6 p11
+Operation p12 "12-abline(v = 500)" Value="abline(v = 500)" Time="1.225" Script="-1" Pos="7,1,7,6";
+CF p11 p12
+Operation p13 "13-dev.off()" Value="dev.off()" Time="1.23" Script="-1" Pos="8,1,8,19";
+CF p12 p13
+File d7 "7-cor_plot.pdf" Value="data/7-cor_plot.pdf" ValType="\"{\"container\":\"vector\", \"dimension\":[1], \"type\":[\"character\"]}\"" Time="2017-06-22T12.23.12EDT" Location="/Users/hermes/Labs/HF/projects/e2ep/projects/codecleanR/json/cor_plot.pdf";
+DF p13 d7
+Finish p14 "14-Console" Value="Console" Time="1.243" Script="NA" Pos="NA";
+CF p13 p14
+
