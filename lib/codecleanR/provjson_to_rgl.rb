@@ -70,7 +70,6 @@ module CodecleanR
     def ancestor file, map
       tree = @dg.bfs_search_tree_from(file)
       g = @dg.vertices_filtered_by {|v| tree.has_vertex? v}
-      g.write_to_graphic_file('jpg')
       list = g.vertices
       list.delete_if { |v| !v.include?('p') }
       puts list
