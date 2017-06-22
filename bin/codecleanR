@@ -22,4 +22,4 @@ else
   puts '--svg <path to provjson> output graph as svg'
 end
 v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
-CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).ancestor 'd18', v.instructions
+CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).ancestor 'd2', v.instructions

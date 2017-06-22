@@ -53,7 +53,8 @@ module CodecleanR
       begin
         json = JSON.parse(string)
       rescue JSON::ParserError
-        return
+        puts 'Failed parsing.'
+        abort
       end
 
       json['prefix'].each do |k, v|

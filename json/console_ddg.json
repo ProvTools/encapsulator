@@ -167,7 +167,7 @@
 "rdt:language" : "R",
 "rdt:rVersion" : "R version 3.4.0 (2017-04-21)",
 "rdt:script" : "",
-"rdt:sourcedScripts" : ,
+"rdt:sourcedScripts" : "",
 "rdt:scriptTimeStamp" : "",
 "rdt:workingDirectory" : "/Users/hermes/Labs/HF/projects/e2ep/projects/codecleanR/json",
 "rdt:ddgDirectory" : "console_ddg",
@@ -346,7 +346,7 @@
 
 "e25" : {
 "prov:entity" : "d7",
-"prov:activity" : "p13"
+"prov:activity" : "p11"
 }},
 "used":{
 
