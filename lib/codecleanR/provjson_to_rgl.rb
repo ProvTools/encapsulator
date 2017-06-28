@@ -72,14 +72,10 @@ module CodecleanR
       g = @dg.vertices_filtered_by {|v| tree.has_vertex? v}
       list = g.vertices
       list.delete_if { |v| !v.include?('p') }
-      puts list
-      puts "\n\n-----"
-      puts "Code:"
-      puts "-----"
+      list = list.sort_by{ |m| m.tr('p', '').to_i }
       list.each do |v|
         puts map[v]
       end
-      puts "\n\n"
     end
   end
 end
