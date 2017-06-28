@@ -3,11 +3,13 @@ module CodecleanR
     attr_reader :map
     attr_reader :files
     attr_reader :instructions
+    attr_reader :libraries
 
     def initialize
       @map = Hash.new(0)
       @files = Hash.new
       @instructions = Hash.new
+      @libraries = Hash.new
     end
 
     def add key
@@ -25,6 +27,9 @@ module CodecleanR
       self.add v['rdt:type']
       if v['rdt:type'] == 'Operation'
         @instructions[k]=v['rdt:name']
+      end
+      if /(library|require)\(('|")[a-zA-Z]+('|")/.match v['rdt:name']
+        @libraries[k]=v['rdt:name']
       end
     end
 

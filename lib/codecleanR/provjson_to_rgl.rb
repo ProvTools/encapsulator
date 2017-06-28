@@ -67,14 +67,17 @@ module CodecleanR
       @dg.write_to_graphic_file('png')
     end
 
-    def ancestor file, map
+    def ancestor file, vertices
       tree = @dg.bfs_search_tree_from(file)
       g = @dg.vertices_filtered_by {|v| tree.has_vertex? v}
       list = g.vertices
       list.delete_if { |v| !v.include?('p') }
       list = list.sort_by{ |m| m.tr('p', '').to_i }
+      vertices.libraries.each do |k, v|
+        puts v
+      end
       list.each do |v|
-        puts map[v]
+        puts vertices.instructions[v]
       end
     end
   end
