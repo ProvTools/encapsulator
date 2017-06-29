@@ -23,8 +23,14 @@ elsif ARGV[0] == '--png'
 elsif ARGV[0] == '--svg'
   CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).svg
 elsif ARGV[0] == '--code'
-  v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
-  CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).ancestor ARGV[2], v
+  $json_name = ARGV[1]
+  #v = CodecleanR::VertexCounter.new.read_json_file($json_name)
+  script = CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).script ARGV[2]
+  if script.nil?
+    puts 'This is an input fule.'
+  else
+    puts script
+  end
 elsif ARGV[0] == '--run'
   require 'rinruby'
   r = RinRuby.new(echo: false)
