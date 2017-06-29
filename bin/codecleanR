@@ -27,8 +27,9 @@ elsif ARGV[0] == '--code'
   CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).ancestor ARGV[2], v
 elsif ARGV[0] == '--run'
   require 'rinruby'
-  R.eval "library('RDataTracker')"
-  R.eval "ddg.run('#{ARGV[1]}')"
+  r = RinRuby.new(echo: false)
+  r.eval "library('RDataTracker')"
+  r.eval "ddg.run('#{ARGV[1]}')"
 else
   usage()
 end
