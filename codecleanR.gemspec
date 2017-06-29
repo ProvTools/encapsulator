@@ -13,6 +13,10 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Clean messy R code.}
   spec.homepage      = "https://github.com/tfjmp/codecleanR"
 
+  spec.add_runtime_dependency "rgl", ">= 0.5.3"
+  spec.add_runtime_dependency "rinruby", ">= 2.0.3"
+  spec.add_runtime_dependency "json", ">= 2.1.0"
+
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
