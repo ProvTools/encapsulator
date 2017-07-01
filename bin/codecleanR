@@ -107,7 +107,9 @@ elsif ARGV[0] == '--code'
 elsif ARGV[0] == '--run'
   require 'rinruby'
   r = RinRuby.new(echo: false)
-  r.eval "library('RDataTracker')"
+	r.eval "require('devtools')"
+	r.eval "install_github('End-to-end-provenance/RDataTracker', ref='graphics')"
+	r.eval "library('RDataTracker')"
   r.eval "ddg.run('#{ARGV[1]}')"
 else
   usage()
