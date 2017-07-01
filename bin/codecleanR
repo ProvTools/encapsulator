@@ -100,7 +100,7 @@ elsif ARGV[0] == '--code'
   #v = CodecleanR::VertexCounter.new.read_json_file($json_name)
   script = CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).script ARGV[2]
   if script.nil?
-    puts 'This is an input fule.'
+    puts 'This is an input file.'
   else
     puts script
   end
