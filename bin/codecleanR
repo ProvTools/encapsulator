@@ -14,6 +14,15 @@ def usage
 	puts '--decapsulate <user>/<project> download the coresponding capsule'
 end
 
+def run script
+	require 'rinruby'
+  r = RinRuby.new(echo: false)
+	r.eval "require('devtools')"
+	r.eval "install_github('End-to-end-provenance/RDataTracker', ref='graphics')"
+	r.eval "library('RDataTracker')"
+  r.eval "ddg.run('#{script}')"
+end
+
 def vagrant vm_name, install_instructions
   provision = Array.new
   provision << '# -*- mode: ruby -*-'
@@ -82,9 +91,8 @@ def decapsulate capsule_name
 end
 
 if ARGV[0] == '--info'
-  CodecleanR::EdgeCounter.new.read_json_file(ARGV[1]).show
-  CodecleanR::VertexCounter.new.read_json_file(ARGV[1]).show
-  CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).information
+	rgl = CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1])
+  CodecleanR::VertexCounter.new.read_json_file(ARGV[1]).show rgl
 elsif ARGV[0] == '--encapsulate'
 	encapsulate ARGV[1], ARGV[2]
 elsif ARGV[0] == '--decapsulate'
@@ -105,12 +113,7 @@ elsif ARGV[0] == '--code'
     puts script
   end
 elsif ARGV[0] == '--run'
-  require 'rinruby'
-  r = RinRuby.new(echo: false)
-	r.eval "require('devtools')"
-	r.eval "install_github('End-to-end-provenance/RDataTracker', ref='graphics')"
-	r.eval "library('RDataTracker')"
-  r.eval "ddg.run('#{ARGV[1]}')"
+	run ARGV[1]
 else
   usage()
 end

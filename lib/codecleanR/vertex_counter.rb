@@ -44,18 +44,20 @@ module CodecleanR
       self.add v['rdt:type']
     end
 
-    def show
-      puts "\n\n-------------\nVertex types\n-------------\n"
-      @map = @map.sort_by { |key, value| value }.reverse
-      @map.each do |key, value|
-        puts "#{key}:#{value}"
-      end
+    def show provrgl
+			puts 'Files'
+			puts '-----'
       @files.each do |key, value|
-        puts "#{key}:#{value}"
+        if is_input provrgl, key
+					puts "Input #{value}"
+				else
+					puts "Output #{value}"
+				end
       end
-      @packages.each do |key, value|
-        puts "#{key}:#{value}"
-      end
+			puts "\n\n"
+			puts 'Packages'
+			puts '--------'
+      packages_show
     end
 
 		def packages_show
@@ -64,6 +66,10 @@ module CodecleanR
         	puts "#{key} v#{value}"
         end
 			end
+		end
+
+		def is_input provrgl, file_id
+			provrgl.source_code(file_id, self).empty?
 		end
 
     def install
