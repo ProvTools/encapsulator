@@ -1,3 +1,4 @@
+require "find"
 require "codecleanR/version"
 require "codecleanR/provjson_parser"
 require "codecleanR/edge_counter"

@@ -51,18 +51,6 @@ def vagrant vm_name, install_instructions
   provision << 'end'
 end
 
-def capture_stderr
-  # The output stream must be an IO-like object. In this case we capture it in
-  # an in-memory IO object so we can return the string value. You can assign any
-  # IO object here.
-  previous_stderr, $stderr = $stderr, StringIO.new
-  yield
-  $stderr.string
-ensure
-  # Restore the previous value of stderr (typically equal to STDERR).
-  $stderr = previous_stderr
-end
-
 def encapsulate source, capsule_name
 	run_script source do
 		v = CodecleanR::VertexCounter.new.read_json_file('ddg.json')
@@ -120,6 +108,24 @@ def source_code source, target_output, destination
 	end
 end
 
+def script_inputs source, target_output, destination
+	inputs = nil
+	destination = '../'+destination
+	run_script source do
+		inputs = CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json').script_inputs target_output
+		puts inputs
+		inputs.each do |path, file|
+			next unless !file.include? destination
+			dest_path = path.gsub '..', destination
+			dest = file.gsub '..', destination
+			puts file, dest
+			system 'mkdir', '-p', dest_path
+			system 'cp', '-f', file, dest
+			puts "Saved input #{dest} for script #{target_output}.R"
+		end
+	end
+end
+
 if ARGV[0] == '--info'
 	run_script ARGV[1] do
 		rgl = CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json')
@@ -127,11 +133,13 @@ if ARGV[0] == '--info'
 	end
 elsif ARGV[0] == '--encapsulate'
 	system 'rm', '-rf', '.'+ARGV[2]
-	system 'mkdir', '-p', '.'+ARGV[2]+'/workspace'
+	out_path = '.'+ARGV[2]+'/workspace'
+	system 'mkdir', '-p', out_path
 	for i in 3..ARGV.size
 		break unless !ARGV[i].nil?
 		out_name = '.'+ARGV[2]+'/workspace/'+ARGV[i]+'.R'
 		source_code ARGV[1], ARGV[i], out_name
+		script_inputs ARGV[1], ARGV[i], out_path
 		puts "Generated script for output #{ARGV[i]}"
 	end
 	encapsulate ARGV[1], ARGV[2]

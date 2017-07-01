@@ -9,6 +9,7 @@ module CodecleanR
     def initialize
       @map = Hash.new(0)
       @files = Hash.new
+			@copies = Hash.new
       @instructions = Hash.new
       @libraries = Hash.new
       @packages = Hash.new
@@ -68,8 +69,19 @@ module CodecleanR
 			end
 		end
 
-		def is_input provrgl, file_id
-			provrgl.source_code(file_id, self).empty?
+		def is_input provrgl, file_name
+			provrgl.source_code(file_name, self).empty?
+		end
+
+		def is_input_with_id provrgl, id
+			@files.each do |key, value|
+        if id == key
+					if is_input provrgl, value
+						return true
+					end
+				end
+      end
+			return false
 		end
 
     def install
