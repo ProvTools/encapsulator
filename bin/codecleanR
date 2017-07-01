@@ -12,10 +12,41 @@ def usage
   puts '--run <path to R script> run the provided r script'
 end
 
+def vagrant vm_name, install_instructions
+  provision = Array.new
+  provision << '# -*- mode: ruby -*-'
+  provision << '# vi: set ft=ruby :'
+  provision << 'Vagrant.configure(2) do |config|'
+  provision << "  "+'config.vm.box = "jhcook/fedora25"'
+  provision << "  "+'config.vm.provider "virtualbox" do |vb|'
+  provision << "  "+'vb.gui = true'
+  provision << "  "+'vb.memory = 2048'
+  provision << "  "+'vb.customize ["modifyvm", :id, "--cpuexecutioncap", "70"]'
+  provision << "  "+'vb.cpus = 2'
+  provision << "  "+"vb.name = \"#{vm_name}\""
+  provision << 'end'
+  provision << 'config.vm.provision "shell", inline: <<-SHELL'
+  provision << "  "+'sudo dnf -y -v install openssl-devel libxml2-devel'
+  provision << "  "+'sudo dnf -y -v install libcurl libcurl-devel'
+  provision << "  "+'sudo dnf -y -v install perl-CPAN'
+  provision << "  "+'sudo dnf -y -v install ruby'
+  provision << "  "+'wget https://atom.io/download/rpm'
+  provision << "  "+'mv ./rpm ./atom.rpm'
+  provision << "  "+'sudo dnf -y install ./atom.rpm'
+  provision << "  "+'rm -rf ./atom.rpm'
+  provision << install_instructions
+  provision << 'SHELL'
+  provision << 'end'
+end
+
 if ARGV[0] == '--info'
   CodecleanR::EdgeCounter.new.read_json_file(ARGV[1]).show
-  CodecleanR::VertexCounter.new.read_json_file(ARGV[1]).show
+  v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
+  puts vagrant 'test', v.install
   CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).information
+elsif ARGV[0] == '--provision'
+  v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
+  puts vagrant ARGV[2], v.install
 elsif ARGV[0] == '--jpg'
   CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
 elsif ARGV[0] == '--png'
