@@ -90,10 +90,26 @@ def decapsulate capsule_name
 	puts 'you should find your capsule in the virtualbox GUI.'
 end
 
-if ARGV[0] == '--info'
-	run ARGV[1]
-	prov_folder = ARGV[1].gsub('.R', '_ddg')
+def run_script script
+	run script
+	prov_folder = script.gsub('.R', '_ddg')
 	Dir.chdir prov_folder do
+		yield
+	end
+end
+
+def svg script
+
+end
+
+def png script
+	run_script script do
+		CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
+	end
+end
+
+if ARGV[0] == '--info'
+	run_script ARGV[1] do
 		rgl = CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json')
   	CodecleanR::VertexCounter.new.read_json_file('ddg.json').show rgl
 	end
@@ -102,22 +118,16 @@ elsif ARGV[0] == '--encapsulate'
 elsif ARGV[0] == '--decapsulate'
   decapsulate ARGV[1]
 elsif ARGV[0] == '--jpg'
-	run ARGV[1]
-	prov_folder = ARGV[1].gsub('.R', '_ddg')
-	Dir.chdir prov_folder do
-  	CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
+	run_script ARGV[1] do
+		CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).jpg
 	end
 elsif ARGV[0] == '--png'
-	run ARGV[1]
-	prov_folder = ARGV[1].gsub('.R', '_ddg')
-	Dir.chdir prov_folder do
-  	CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
+	run_script ARGV[1] do
+		CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
 	end
 elsif ARGV[0] == '--svg'
-	run ARGV[1]
-	prov_folder = ARGV[1].gsub('.R', '_ddg')
-	Dir.chdir prov_folder do
-  	CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).svg
+	run_script ARGV[1] do
+		CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).svg
 	end
 elsif ARGV[0] == '--code'
   $json_name = ARGV[1]
