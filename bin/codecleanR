@@ -41,9 +41,11 @@ def vagrant vm_name, install_instructions
 end
 
 def decapsulate vm
+	puts 'looking for the capsule #{vm}...'
   open5('vagrant', 'init', vm) do |i, o, e, t|
     puts o.gets
   end
+	puts 'getting your capsule ready, be patient...'
   open5('vagrant', 'up') do |i, o, e, t|
     puts o.gets
   end
