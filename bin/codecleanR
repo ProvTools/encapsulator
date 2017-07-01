@@ -44,9 +44,12 @@ def vagrant vm_name, install_instructions
   provision << "  "+'sudo dnf -y -v install ruby'
   provision << "  "+'wget https://atom.io/download/rpm'
   provision << "  "+'mv ./rpm ./atom.rpm'
-  provision << "  "+'sudo dnf -y install ./atom.rpm'
+  provision << "  "+'sudo dnf -y -v install ./atom.rpm'
   provision << "  "+'rm -rf ./atom.rpm'
   provision << install_instructions
+	provision << " "+'https://download1.rstudio.org/rstudio-1.0.143-x86_64.rpm'
+	provision << "  "+'sudo dnf -y -v install ./rstudio-1.0.143-x86_64.rpm'
+	provision << "  "+'rm -rf ./rstudio-1.0.143-x86_64.rpm'
   provision << 'SHELL'
   provision << 'end'
 end
