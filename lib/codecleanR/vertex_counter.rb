@@ -58,11 +58,20 @@ module CodecleanR
       end
     end
 
+		def packages_show
+			@packages.each do |key, value|
+				if !['datasets', 'utils', 'graphics', 'grDevices', 'methods', 'stats', 'RDataTracker', 'devtools'].include?(key)
+        	puts "#{key} v#{value}"
+        end
+			end
+		end
+
     def install
       instructions = Array.new
       @packages.each do |key, value|
         if key == 'base'
-          instructions << "  sudo -y -v dnf install R-#{value}"
+          instructions << "  sudo dnf -y -v install R-#{value}"
+	        instructions << "  sudo dnf -y -v install R"
           instructions << "  sudo su - -c \"R -e \\\\\\\"install.packages(\'devtools\', repos=\'http://cran.rstudio.com/\', dependencies = TRUE)\\\\\\\"\""
         elsif !['datasets', 'utils', 'graphics', 'grDevices', 'methods', 'stats', 'RDataTracker', 'devtools'].include?(key)
           instructions << "  sudo su - -c \"R -e \\\\\\\"require('devtools');install_version(\'#{key}\', version=\'#{value}\', repos=\'http://cran.rstudio.com/\')\\\\\\\"\""

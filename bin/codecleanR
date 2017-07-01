@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require "codecleanR"
-require 'open5'
 
 def usage
   puts "USAGE\n\n"
@@ -11,6 +10,8 @@ def usage
   puts '--svg <path to provjson> output graph as svg'
   puts '--code <path to provjson> <output id> output code needed to generate the node'
   puts '--run <path to R script> run the provided r script'
+	puts '--encapsulate <path to provjson> <user>/<project> create the specified capsule'
+	puts '--decapsulate <user>/<project> download the coresponding capsule'
 end
 
 def vagrant vm_name, install_instructions
@@ -24,7 +25,7 @@ def vagrant vm_name, install_instructions
   provision << "  "+'vb.memory = 2048'
   provision << "  "+'vb.customize ["modifyvm", :id, "--cpuexecutioncap", "70"]'
   provision << "  "+'vb.cpus = 2'
-  provision << "  "+"vb.name = \"#{vm_name}\""
+  provision << "  "+"vb.name = \"#{vm_name.gsub '/', '_'}\""
   provision << 'end'
   provision << 'config.vm.provision "shell", inline: <<-SHELL'
   provision << "  "+'sudo dnf -y -v install openssl-devel libxml2-devel'
@@ -40,25 +41,52 @@ def vagrant vm_name, install_instructions
   provision << 'end'
 end
 
-def decapsulate vm
-	puts 'looking for the capsule #{vm}...'
-  open5('vagrant', 'init', vm) do |i, o, e, t|
-    puts o.gets
-  end
+def capture_stderr
+  # The output stream must be an IO-like object. In this case we capture it in
+  # an in-memory IO object so we can return the string value. You can assign any
+  # IO object here.
+  previous_stderr, $stderr = $stderr, StringIO.new
+  yield
+  $stderr.string
+ensure
+  # Restore the previous value of stderr (typically equal to STDERR).
+  $stderr = previous_stderr
+end
+
+def encapsulate json, capsule_name
+	v = CodecleanR::VertexCounter.new.read_json_file(json)
+	system 'mkdir', '-p', '.'+capsule_name
+	Dir.chdir './.'+capsule_name do
+		puts "In directory #{Dir.pwd}..."
+		File.open("Vagrantfile", "w+") do |f|
+			puts 'Encapsulator will attempt to install the following packages:'
+			v.packages_show
+			script = vagrant capsule_name, v.install
+  		f.puts(script)
+		end
+		puts 'Provision script is ready...'
+		puts 'getting your capsule ready, be patient...'
+		system("vagrant", "up", out: $stdout, err: $stdout)
+		system("vagrant", "halt", out: $stdout, err: $stdout)
+	end
+	puts 'Your capsule should be visible in the virtualbox interface.'
+end
+
+def decapsulate capsule_name
+	puts "looking for the capsule #{vm}..."
+	system("vagrant", "init", capsule_name, out: $stdout, err: $stdout)
 	puts 'getting your capsule ready, be patient...'
-  open5('vagrant', 'up') do |i, o, e, t|
-    puts o.gets
-  end
+	system("vagrant", "up", out: $stdout, err: $stdout)
+	system("vagrant", "halt", out: $stdout, err: $stdout)
+	puts 'you should find your capsule in the virtualbox GUI.'
 end
 
 if ARGV[0] == '--info'
   CodecleanR::EdgeCounter.new.read_json_file(ARGV[1]).show
-  v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
-  puts vagrant 'test', v.install
+  CodecleanR::VertexCounter.new.read_json_file(ARGV[1]).show
   CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).information
-elsif ARGV[0] == '--provision'
-  v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
-  puts vagrant ARGV[2], v.install
+elsif ARGV[0] == '--encapsulate'
+	encapsulate ARGV[1], ARGV[2]
 elsif ARGV[0] == '--decapsulate'
   decapsulate ARGV[1]
 elsif ARGV[0] == '--jpg'
