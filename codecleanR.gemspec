@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "rgl", ">= 0.5.3"
   spec.add_runtime_dependency "rinruby", ">= 2.0.3"
   spec.add_runtime_dependency "json", ">= 2.1.0"
+  spec.add_runtime_dependency "open5", ">= 0.2"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.

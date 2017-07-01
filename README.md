@@ -6,7 +6,7 @@
 
 ```
 sudo dnf install ruby
-gem install json rgl rake bundler
+gem install json rgl rake bundler open5
 git clone https://github.com/tfjmp/codecleanR.git
 cd codecleanR
 rake install

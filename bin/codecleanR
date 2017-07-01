@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "codecleanR"
+require 'open5'
 
 def usage
   puts "USAGE\n\n"
@@ -39,6 +40,15 @@ def vagrant vm_name, install_instructions
   provision << 'end'
 end
 
+def decapsulate vm
+  open5('vagrant', 'init', vm) do |i, o, e, t|
+    puts o.gets
+  end
+  open5('vagrant', 'up') do |i, o, e, t|
+    puts o.gets
+  end
+end
+
 if ARGV[0] == '--info'
   CodecleanR::EdgeCounter.new.read_json_file(ARGV[1]).show
   v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
@@ -47,6 +57,8 @@ if ARGV[0] == '--info'
 elsif ARGV[0] == '--provision'
   v = CodecleanR::VertexCounter.new.read_json_file(ARGV[1])
   puts vagrant ARGV[2], v.install
+elsif ARGV[0] == '--decapsulate'
+  decapsulate ARGV[1]
 elsif ARGV[0] == '--jpg'
   CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
 elsif ARGV[0] == '--png'
