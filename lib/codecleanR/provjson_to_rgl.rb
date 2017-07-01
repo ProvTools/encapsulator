@@ -69,19 +69,27 @@ module CodecleanR
 
     def source_code file, vertices
       statements = Array.new
-      tree = @dg.bfs_search_tree_from(file)
+			id = ''
+			vertices.files.each do |k, v|
+				if v == file
+					id = k
+					break
+				end
+			end
+      tree = @dg.bfs_search_tree_from(id)
       g = @dg.vertices_filtered_by {|v| tree.has_vertex? v}
       list = g.vertices
       list.delete_if { |v| !v.include?('p') }
       list = list.sort_by{ |m| m.tr('p', '').to_i }
       list.each do |v|
+				next unless !vertices.instructions[v].nil?
         statements << vertices.instructions[v]
       end
       return statements
     end
 
     def script output
-      vertices = CodecleanR::VertexCounter.new.read_json_file($json_name)
+      vertices = CodecleanR::VertexCounter.new.read_json_file(@filename)
       script = Array.new
       vertices.libraries.each do |k, v|
         script << v

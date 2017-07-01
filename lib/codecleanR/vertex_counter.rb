@@ -48,7 +48,7 @@ module CodecleanR
 			puts 'Files'
 			puts '-----'
       @files.each do |key, value|
-        if is_input provrgl, key
+        if is_input provrgl, value
 					puts "Input #{value}"
 				else
 					puts "Output #{value}"

@@ -2,8 +2,11 @@ require 'json'
 
 module CodecleanR
   class ProvJSONParser
+		attr_reader :filename
+
     def read_json_file filename
       if filename != nil
+				@filename=filename
         parse_json File.read(filename) unless !File.file?(filename)
         print "File does not exist\n" unless File.file?(filename)
       end
