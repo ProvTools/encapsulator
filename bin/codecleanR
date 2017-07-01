@@ -37,6 +37,7 @@ def vagrant vm_name, install_instructions
   provision << "  "+"vb.name = \"#{vm_name.gsub '/', '_'}\""
   provision << 'end'
   provision << 'config.vm.provision "shell", inline: <<-SHELL'
+	provision << "  "+'cp -a /vagrant/workspace/. /home/vagrant/Documents'
   provision << "  "+'sudo dnf -y -v install openssl-devel libxml2-devel'
   provision << "  "+'sudo dnf -y -v install libcurl libcurl-devel'
   provision << "  "+'sudo dnf -y -v install perl-CPAN'
@@ -62,23 +63,25 @@ ensure
   $stderr = previous_stderr
 end
 
-def encapsulate json, capsule_name
-	v = CodecleanR::VertexCounter.new.read_json_file(json)
-	system 'mkdir', '-p', '.'+capsule_name
-	Dir.chdir './.'+capsule_name do
-		puts "In directory #{Dir.pwd}..."
-		File.open("Vagrantfile", "w+") do |f|
-			puts 'Encapsulator will attempt to install the following packages:'
-			v.packages_show
-			script = vagrant capsule_name, v.install
-  		f.puts(script)
+def encapsulate source, capsule_name
+	run_script source do
+		v = CodecleanR::VertexCounter.new.read_json_file('ddg.json')
+		system 'mkdir', '-p', '../.'+capsule_name
+		Dir.chdir '../.'+capsule_name do
+			puts "In directory #{Dir.pwd}..."
+			File.open("Vagrantfile", "w+") do |f|
+				puts 'Encapsulator will attempt to install the following packages:'
+				v.packages_show
+				script = vagrant capsule_name, v.install
+	  		f.puts(script)
+			end
+			puts 'Provision script is ready...'
+			puts 'getting your capsule ready, be patient...'
+			system("vagrant", "up", out: $stdout, err: $stdout)
+			system("vagrant", "halt", out: $stdout, err: $stdout)
 		end
-		puts 'Provision script is ready...'
-		puts 'getting your capsule ready, be patient...'
-		system("vagrant", "up", out: $stdout, err: $stdout)
-		system("vagrant", "halt", out: $stdout, err: $stdout)
+		puts 'Your capsule should be visible in the virtualbox interface.'
 	end
-	puts 'Your capsule should be visible in the virtualbox interface.'
 end
 
 def decapsulate capsule_name
@@ -90,8 +93,12 @@ def decapsulate capsule_name
 	puts 'you should find your capsule in the virtualbox GUI.'
 end
 
+$ran_script=false
 def run_script script
-	run script
+	if !$ran_script
+		run script
+		$ran_script = true
+	end
 	prov_folder = script.gsub('.R', '_ddg')
 	Dir.chdir prov_folder do
 		yield
@@ -119,6 +126,14 @@ if ARGV[0] == '--info'
   	CodecleanR::VertexCounter.new.read_json_file('ddg.json').show rgl
 	end
 elsif ARGV[0] == '--encapsulate'
+	system 'rm', '-rf', '.'+ARGV[2]
+	system 'mkdir', '-p', '.'+ARGV[2]+'/workspace'
+	for i in 3..ARGV.size
+		break unless !ARGV[i].nil?
+		out_name = '.'+ARGV[2]+'/workspace/'+ARGV[i]+'.R'
+		source_code ARGV[1], ARGV[i], out_name
+		puts "Generated script for output #{ARGV[i]}"
+	end
 	encapsulate ARGV[1], ARGV[2]
 elsif ARGV[0] == '--decapsulate'
   decapsulate ARGV[1]
