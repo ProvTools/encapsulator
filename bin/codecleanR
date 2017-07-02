@@ -150,15 +150,15 @@ elsif ARGV[0] == '--decapsulate'
   decapsulate ARGV[1]
 elsif ARGV[0] == '--jpg'
 	run_script ARGV[1] do
-		CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).jpg
+		CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json').jpg
 	end
 elsif ARGV[0] == '--png'
 	run_script ARGV[1] do
-		CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).png
+		CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json').png
 	end
 elsif ARGV[0] == '--svg'
 	run_script ARGV[1] do
-		CodecleanR::ProvJSONtoRGL.new.read_json_file(ARGV[1]).svg
+		CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json').svg
 	end
 elsif ARGV[0] == '--code'
 	source_code ARGV[1], ARGV[2], ARGV[3]
