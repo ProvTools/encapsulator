@@ -10,7 +10,7 @@ def usage
   puts '--svg <path to R script> output graph as svg'
   puts '--code <path to R script> <output name> <dest> output code needed to generate the output in dest'
   puts '--run <path to R script> run the provided r script'
-	puts '--encapsulate <path to provjson> <user>/<project> create the specified capsule'
+	puts '--encapsulate <user>/<project> <output> [output] ... [output] create the specified capsule'
 	puts '--decapsulate <user>/<project> download the coresponding capsule'
 end
 
@@ -111,6 +111,12 @@ def source_code source, target_output, destination
 	end
 end
 
+def install_fedora
+  system 'wget', 'http://download.virtualbox.org/virtualbox/5.1.22/VirtualBox-5.1-5.1.22_115126_fedora25-1.x86_64.rpm', out: $stdout, err: $stdout
+  system 'sudo', 'dnf', '-y', '-v', 'install', './VirtualBox-5.1-5.1.22_115126_fedora25-1.x86_64.rpm', out: $stdout, err: $stdout
+  system 'sudo', 'dnf', '-y', '-v', 'install', 'vagrant', out: $stdout, err: $stdout
+end
+
 def script_inputs source, target_output, destination
 	inputs = nil
 	destination = '../'+destination
@@ -164,6 +170,10 @@ elsif ARGV[0] == '--code'
 	source_code ARGV[1], ARGV[2], ARGV[3]
 elsif ARGV[0] == '--run'
 	run ARGV[1]
+elsif ARGV[0] == '--install'
+	if ARGV[1] == 'fedora'
+    install_fedora
+  end
 else
   usage()
 end
