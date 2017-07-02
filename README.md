@@ -29,7 +29,7 @@ codecleanR -h
 ### MacOS
 
 ```
-sudo apt install ruby
+brew install ruby
 gem install json rgl rake bundler
 git clone https://github.com/tfjmp/codecleanR.git
 cd codecleanR
