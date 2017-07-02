@@ -117,6 +117,11 @@ def install_fedora
   system 'sudo', 'dnf', '-y', '-v', 'install', 'vagrant', out: $stdout, err: $stdout
 end
 
+def install_ubuntu
+	system 'sudo', 'apt', '-y', 'install', 'virtualbox', 'virtualbox-ext-pack', out: $stdout, err: $stdout
+	system 'sudo', 'apt', '-y', 'install', 'vagrant', out: $stdout, err: $stdout
+end
+
 def script_inputs source, target_output, destination
 	inputs = nil
 	destination = '../'+destination
@@ -173,6 +178,8 @@ elsif ARGV[0] == '--run'
 elsif ARGV[0] == '--install'
 	if ARGV[1] == 'fedora'
     install_fedora
+	elsif ARGV[1] == 'ubuntu'
+		install_ubuntu
   end
 else
   usage()
