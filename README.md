@@ -2,17 +2,40 @@
 
 ## Installation
 
-(Fedora 25, look for package name on your unix distribution)
+### Fedora 25
 
 ```
 sudo dnf install ruby
-gem install json rgl rake bundler open5
+gem install json rgl rake bundler
 git clone https://github.com/tfjmp/codecleanR.git
 cd codecleanR
 rake install
+codecleanR --install fedora
 codecleanR -h
-# try it out!
-codecleanR --code ./json/messy_ddg.json d17
+```
+
+### Ubuntu
+
+```
+sudo apt install ruby
+gem install json rgl rake bundler
+git clone https://github.com/tfjmp/codecleanR.git
+cd codecleanR
+rake install
+codecleanR --install ubuntu
+codecleanR -h
+```
+
+### MacOS
+
+```
+sudo apt install ruby
+gem install json rgl rake bundler
+git clone https://github.com/tfjmp/codecleanR.git
+cd codecleanR
+rake install
+codecleanR --install mac
+codecleanR -h
 ```
 
 ## USAGE
