@@ -122,6 +122,12 @@ def install_ubuntu
 	system 'sudo', 'apt', '-y', 'install', 'vagrant', out: $stdout, err: $stdout
 end
 
+def install_mac
+	system 'brew', 'cask', 'install', 'virtualbox', out: $stdout, err: $stdout
+	system 'brew', 'cask', 'install', 'vagrant', out: $stdout, err: $stdout
+	system 'brew', 'cask', 'install', 'vagrant-manager', out: $stdout, err: $stdout
+end
+
 def script_inputs source, target_output, destination
 	inputs = nil
 	destination = '../'+destination
@@ -180,6 +186,8 @@ elsif ARGV[0] == '--install'
     install_fedora
 	elsif ARGV[1] == 'ubuntu'
 		install_ubuntu
+	elsif ARGV[1] == 'mac'
+		install_mac
   end
 else
   usage()
