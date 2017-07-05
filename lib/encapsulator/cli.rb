@@ -74,7 +74,6 @@ module Encapsulator
     end
 
     def CLI.source_code script, target_output, destination
-    	script = nil
     	RDataTracker.run_script script do
     		script = Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').script target_output
     	end

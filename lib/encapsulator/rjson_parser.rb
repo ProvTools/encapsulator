@@ -24,15 +24,15 @@ module Encapsulator
       @libraries = Hash.new
       @packages = Hash.new
       @script = IO.readlines(r_file)
-      puts @script
     end
 
     def get_operation start_line, end_line
+      start_line-=1
+      end_line-=1
       operation = ''
       for i in start_line..end_line
         operation += @script[i] unless @script[i].nil?
       end
-      puts operation
       return operation
     end
 
