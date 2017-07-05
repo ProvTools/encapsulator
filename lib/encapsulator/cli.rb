@@ -83,6 +83,7 @@ module Encapsulator
     		File.open(destination, "w+") do |f|
     			f.puts(script)
     		end
+        RDataTracker.tidy destination
     		puts "Script written to #{destination}"
     	end
     end
@@ -114,7 +115,7 @@ module Encapsulator
     def CLI.script_inputs script, target_output, destination
     	inputs = nil
     	destination = '../'+destination
-    	RDataTracker.run_script source do
+    	RDataTracker.run_script script do
     		inputs = Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').script_inputs target_output
     		puts inputs
     		inputs.each do |path, file|
