@@ -1,6 +1,6 @@
 require 'encapsulator/version'
 require 'encapsulator/provjson_parser'
-require 'encapsulator/provjson_to_rgl'
+require 'encapsulator/rjsonparser'
 require 'encapsulator/installer'
 require 'encapsulator/rdatatracker'
 require 'encapsulator/cli'

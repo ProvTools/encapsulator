@@ -6,7 +6,7 @@ require 'rgl/transitivity'
 require 'rgl/traversal'
 
 module Encapsulator
-  class ProvJSONtoRGL < ProvJSONParser
+  class RJSONParser < ProvJSONParser
     attr_reader :dg
     attr_reader :map
     attr_reader :files

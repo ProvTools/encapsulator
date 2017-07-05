@@ -45,7 +45,7 @@ module Encapsulator
 
     def CLI.encapsulate capsule_name, source
     	RDataTracker.run_script source do
-    		v = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json')
+    		v = Encapsulator::RJSONParser.new.read_json_file('ddg.json')
     		system 'mkdir', '-p', '../.'+capsule_name
     		Dir.chdir '../.'+capsule_name do
     			puts "In directory #{Dir.pwd}..."
@@ -76,7 +76,7 @@ module Encapsulator
     def CLI.source_code source, target_output, destination
     	script = nil
     	RDataTracker.run_script source do
-    		script = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').script target_output
+    		script = Encapsulator::RJSONParser.new.read_json_file('ddg.json').script target_output
     	end
     	if script.nil?
     		puts 'This is an input file.'
@@ -90,25 +90,25 @@ module Encapsulator
 
     def CLI.get_jpg script
       RDataTracker.run_script script do
-    		Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').jpg
+    		Encapsulator::RJSONParser.new.read_json_file('ddg.json').jpg
     	end
     end
 
     def CLI.get_png script
       RDataTracker.run_script script do
-    		Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').png
+    		Encapsulator::RJSONParser.new.read_json_file('ddg.json').png
     	end
     end
 
     def CLI.get_svg script
       RDataTracker.run_script script do
-    		Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').svg
+    		Encapsulator::RJSONParser.new.read_json_file('ddg.json').svg
     	end
     end
 
     def CLI.info script
       RDataTracker.run_script script do
-      	Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').show
+      	Encapsulator::RJSONParser.new.read_json_file('ddg.json').show
     	end
     end
 
@@ -116,7 +116,7 @@ module Encapsulator
     	inputs = nil
     	destination = '../'+destination
     	RDataTracker.run_script source do
-    		inputs = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').script_inputs target_output
+    		inputs = Encapsulator::RJSONParser.new.read_json_file('ddg.json').script_inputs target_output
     		puts inputs
     		inputs.each do |path, file|
     			next unless !file.include? destination
