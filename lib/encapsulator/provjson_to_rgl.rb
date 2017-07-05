@@ -1,3 +1,4 @@
+require 'find'
 require 'rgl/adjacency'
 require 'rgl/dot'
 require 'rgl/topsort'

@@ -2,195 +2,42 @@
 
 require "encapsulator"
 
-def usage
-  puts "USAGE\n\n"
-  puts '--info <path to R script> display information about the provenance graph'
-  puts '--jpg <path to R script> output graph as jpg'
-  puts '--png <path to R script> output graph as png'
-  puts '--svg <path to R script> output graph as svg'
-  puts '--code <path to R script> <output name> <dest> output code needed to generate the output in dest'
-  puts '--run <path to R script> run the provided r script'
-	puts '--encapsulate <user>/<project> <output> [output] ... [output] create the specified capsule'
-	puts '--decapsulate <user>/<project> download the coresponding capsule'
-end
-
-def run script
-	require 'rinruby'
-  r = RinRuby.new(echo: false)
-	r.eval "require('devtools')"
-	r.eval "install_github('End-to-end-provenance/RDataTracker', ref='graphics')"
-	r.eval "library('RDataTracker')"
-  r.eval "ddg.run('#{script}')"
-end
-
-def vagrant vm_name, install_instructions
-  provision = Array.new
-  provision << '# -*- mode: ruby -*-'
-  provision << '# vi: set ft=ruby :'
-  provision << 'Vagrant.configure(2) do |config|'
-  provision << "  "+'config.vm.box = "jhcook/fedora25"'
-  provision << "  "+'config.vm.provider "virtualbox" do |vb|'
-  provision << "  "+'vb.gui = true'
-  provision << "  "+'vb.memory = 2048'
-  provision << "  "+'vb.customize ["modifyvm", :id, "--cpuexecutioncap", "70"]'
-  provision << "  "+'vb.cpus = 2'
-  provision << "  "+"vb.name = \"#{vm_name.gsub '/', '_'}\""
-  provision << 'end'
-  provision << 'config.vm.provision "shell", inline: <<-SHELL'
-	provision << "  "+'cp -a /vagrant/workspace/. /home/vagrant/Documents'
-  provision << "  "+'sudo dnf -y -v install openssl-devel libxml2-devel'
-  provision << "  "+'sudo dnf -y -v install libcurl libcurl-devel'
-  provision << "  "+'sudo dnf -y -v install perl-CPAN'
-  provision << "  "+'sudo dnf -y -v install ruby'
-  provision << "  "+'wget https://atom.io/download/rpm'
-  provision << "  "+'mv ./rpm ./atom.rpm'
-  provision << "  "+'sudo dnf -y -v install ./atom.rpm'
-  provision << "  "+'rm -rf ./atom.rpm'
-  provision << install_instructions
-	provision << " "+'https://download1.rstudio.org/rstudio-1.0.143-x86_64.rpm'
-	provision << "  "+'sudo dnf -y -v install ./rstudio-1.0.143-x86_64.rpm'
-	provision << "  "+'rm -rf ./rstudio-1.0.143-x86_64.rpm'
-  provision << 'SHELL'
-  provision << 'end'
-end
-
-def encapsulate source, capsule_name
-	run_script source do
-		v = Encapsulator::VertexCounter.new.read_json_file('ddg.json')
-		system 'mkdir', '-p', '../.'+capsule_name
-		Dir.chdir '../.'+capsule_name do
-			puts "In directory #{Dir.pwd}..."
-			File.open("Vagrantfile", "w+") do |f|
-				puts 'Encapsulator will attempt to install the following packages:'
-				v.packages_show
-				script = vagrant capsule_name, v.install
-	  		f.puts(script)
-			end
-			puts 'Provision script is ready...'
-			puts 'getting your capsule ready, be patient...'
-			system("vagrant", "up", out: $stdout, err: $stdout)
-			system("vagrant", "halt", out: $stdout, err: $stdout)
-		end
-		puts 'Your capsule should be visible in the virtualbox interface.'
-	end
-end
-
-def decapsulate capsule_name
-	puts "looking for the capsule #{vm}..."
-	system("vagrant", "init", capsule_name, out: $stdout, err: $stdout)
-	puts 'getting your capsule ready, be patient...'
-	system("vagrant", "up", out: $stdout, err: $stdout)
-	system("vagrant", "halt", out: $stdout, err: $stdout)
-	puts 'you should find your capsule in the virtualbox GUI.'
-end
-
-$ran_script=false
-def run_script script
-	if !$ran_script
-		run script
-		$ran_script = true
-	end
-	prov_folder = script.gsub('.R', '_ddg')
-	Dir.chdir prov_folder do
-		yield
-	end
-end
-
-def source_code source, target_output, destination
-	script = nil
-	run_script source do
-		script = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').script target_output
-	end
-	if script.nil?
-		puts 'This is an input file.'
-	else
-		File.open(destination, "w+") do |f|
-			f.puts(script)
-		end
-		puts "Script written to #{destination}"
-	end
-end
-
-def install_fedora
-  system 'wget', 'http://download.virtualbox.org/virtualbox/5.1.22/VirtualBox-5.1-5.1.22_115126_fedora25-1.x86_64.rpm', out: $stdout, err: $stdout
-  system 'sudo', 'dnf', '-y', '-v', 'install', './VirtualBox-5.1-5.1.22_115126_fedora25-1.x86_64.rpm', out: $stdout, err: $stdout
-  system 'sudo', 'dnf', '-y', '-v', 'install', 'vagrant', out: $stdout, err: $stdout
-end
-
-def install_ubuntu
-	system 'sudo', 'apt', '-y', 'install', 'virtualbox', 'virtualbox-ext-pack', out: $stdout, err: $stdout
-	system 'sudo', 'apt', '-y', 'install', 'vagrant', out: $stdout, err: $stdout
-end
-
-def install_mac
-	system 'brew', 'cask', 'install', 'virtualbox', out: $stdout, err: $stdout
-	system 'brew', 'cask', 'install', 'vagrant', out: $stdout, err: $stdout
-	system 'brew', 'cask', 'install', 'vagrant-manager', out: $stdout, err: $stdout
-end
-
-def script_inputs source, target_output, destination
-	inputs = nil
-	destination = '../'+destination
-	run_script source do
-		inputs = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').script_inputs target_output
-		puts inputs
-		inputs.each do |path, file|
-			next unless !file.include? destination
-			dest_path = path.gsub '..', destination
-			dest = file.gsub '..', destination
-			puts file, dest
-			system 'mkdir', '-p', dest_path
-			system 'cp', '-f', file, dest
-			puts "Saved input #{dest} for script #{target_output}.R"
-		end
-	end
-end
-
 if ARGV[0] == '--info'
-	run_script ARGV[1] do
-		rgl = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json')
-  	Encapsulator::VertexCounter.new.read_json_file('ddg.json').show rgl
-	end
+	Encapsulator::CLI::info ARGV[1]
 elsif ARGV[0] == '--encapsulate'
-	system 'rm', '-rf', '.'+ARGV[2]
-	out_path = '.'+ARGV[2]+'/workspace'
+	system 'rm', '-rf', '.'+ARGV[1]
+	out_path = '.'+ARGV[1]+'/workspace'
 	system 'mkdir', '-p', out_path
 	for i in 3..ARGV.size
 		break unless !ARGV[i].nil?
-		out_name = '.'+ARGV[2]+'/workspace/'+ARGV[i]+'.R'
-		source_code ARGV[1], ARGV[i], out_name
-		script_inputs ARGV[1], ARGV[i], out_path
+		out_name = '.'+ARGV[1]+'/workspace/'+ARGV[i]+'.R'
+		Encapsulator::CLI::source_code ARGV[2], ARGV[i], out_name
+		Encapsulator::CLI::script_inputs ARGV[2], ARGV[i], out_path
 		puts "Generated script for output #{ARGV[i]}"
 	end
-	encapsulate ARGV[1], ARGV[2]
+	Encapsulator::CLI::encapsulate ARGV[1], ARGV[2]
 elsif ARGV[0] == '--decapsulate'
   decapsulate ARGV[1]
 elsif ARGV[0] == '--jpg'
-	run_script ARGV[1] do
-		Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').jpg
-	end
+  Encapsulator::CLI::get_jpg ARGV[1]
 elsif ARGV[0] == '--png'
-	run_script ARGV[1] do
-		Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').png
-	end
+  Encapsulator::CLI::get_png ARGV[1]
 elsif ARGV[0] == '--svg'
-	run_script ARGV[1] do
-		Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').svg
-	end
+  Encapsulator::CLI::get_svg ARGV[1]
 elsif ARGV[0] == '--code'
-	source_code ARGV[1], ARGV[2], ARGV[3]
+	Encapsulator::CLI::source_code ARGV[1], ARGV[2], ARGV[3]
 elsif ARGV[0] == '--run'
-	run ARGV[1]
+	Encapsulator::RDataTracker::run ARGV[1]
 elsif ARGV[0] == '--version'
 	puts Encapsulator::VERSION
 elsif ARGV[0] == '--install'
 	if ARGV[1] == 'fedora'
-    install_fedora
+    Encapsulator::Installer::install_fedora
 	elsif ARGV[1] == 'ubuntu'
-		install_ubuntu
+		Encapsulator::Installer::install_ubuntu
 	elsif ARGV[1] == 'mac'
-		install_mac
+		Encapsulator::Installer::install_mac
   end
 else
-  usage()
+  Encapsulator::CLI::usage
 end
