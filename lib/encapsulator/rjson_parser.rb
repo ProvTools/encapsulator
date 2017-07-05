@@ -13,8 +13,9 @@ module Encapsulator
     attr_reader :instructions
     attr_reader :libraries
     attr_reader :packages
+    attr_reader :file
 
-    def initialize
+    def initialize r_file
       @dg = RGL::DirectedAdjacencyGraph.new # initialise the graph structure
       @map = Hash.new(0)
       @files = Hash.new
@@ -22,6 +23,17 @@ module Encapsulator
       @instructions = Hash.new
       @libraries = Hash.new
       @packages = Hash.new
+      @script = IO.readlines(r_file)
+      puts @script
+    end
+
+    def get_operation start_line, end_line
+      operation = ''
+      for i in start_line..end_line
+        operation += @script[i] unless @script[i].nil?
+      end
+      puts operation
+      return operation
     end
 
     def add key
@@ -59,7 +71,7 @@ module Encapsulator
     def activity k, v
       self.add v['rdt:type']
       if v['rdt:type'] == 'Operation'
-        @instructions[k]=v['rdt:name']
+        @instructions[k]=get_operation(v['rdt:startLine'].to_i, v['rdt:endLine'].to_i)
       end
       if /(library|require)\(('|")[a-zA-Z]+('|")/.match v['rdt:name']
         @libraries[k]=v['rdt:name']
