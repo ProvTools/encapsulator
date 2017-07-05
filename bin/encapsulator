@@ -107,7 +107,7 @@ def source_code source, target_output, destination
 		File.open(destination, "w+") do |f|
 			f.puts(script)
 		end
-		puts "Script written to #{destination}"
+		puts "Script written to #{destination}" 
 	end
 end
 
