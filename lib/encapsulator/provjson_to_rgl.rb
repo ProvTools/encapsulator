@@ -8,9 +8,24 @@ require 'rgl/traversal'
 module Encapsulator
   class ProvJSONtoRGL < ProvJSONParser
     attr_reader :dg
+    attr_reader :map
+    attr_reader :files
+    attr_reader :instructions
+    attr_reader :libraries
+    attr_reader :packages
 
     def initialize
       @dg = RGL::DirectedAdjacencyGraph.new # initialise the graph structure
+      @map = Hash.new(0)
+      @files = Hash.new
+      @copies = Hash.new
+      @instructions = Hash.new
+      @libraries = Hash.new
+      @packages = Hash.new
+    end
+
+    def add key
+      @map[key]=@map[key]+1
     end
 
     def used k, v
@@ -32,6 +47,32 @@ module Encapsulator
     def wasAssociatedWith k, v
       @dg.add_edge v['prov:activity'], v['prov:agent']
       @dg.add_edge v['prov:agent'], v['prov:plan'] unless !v.key? 'prov:plan'
+    end
+
+    def entity k, v
+      self.add v['rdt:type']
+      if v['rdt:type'] == 'File'
+        @files[k]=v['rdt:name']
+      end
+    end
+
+    def activity k, v
+      self.add v['rdt:type']
+      if v['rdt:type'] == 'Operation'
+        @instructions[k]=v['rdt:name']
+      end
+      if /(library|require)\(('|")[a-zA-Z]+('|")/.match v['rdt:name']
+        @libraries[k]=v['rdt:name']
+      end
+      if k == 'environment'
+        v['rdt:installedPackages'].each do |l|
+          packages[l['package']]=l['version']
+        end
+      end
+    end
+
+    def agent k, v
+      self.add v['rdt:type']
     end
 
     def information
@@ -68,9 +109,9 @@ module Encapsulator
       @dg.write_to_graphic_file('png')
     end
 
-		def get_list file, vertices
+		def get_list file
 			id = ''
-			vertices.files.each do |k, v|
+			@files.each do |k, v|
 				if v == file
 					id = k
 					break
@@ -84,28 +125,27 @@ module Encapsulator
       list = g.vertices
 		end
 
-    def source_code file, vertices
+    def source_code file
 			statements = Array.new
-      list = get_list file, vertices
+      list = get_list file
       list.delete_if { |v| !v.include?('p') }
       list = list.sort_by{ |m| m.tr('p', '').to_i }
       list.each do |v|
-				next unless !vertices.instructions[v].nil?
-        statements << vertices.instructions[v]
+				next unless !@instructions[v].nil?
+        statements << @instructions[v]
       end
       return statements
     end
 
 		def script_inputs file
 			inputs = Hash.new
-			vertices = Encapsulator::VertexCounter.new.read_json_file(@filename)
-			list = get_list file, vertices
-			list.delete_if { |v| !vertices.is_input_with_id(self, v) }
+			list = get_list file
+			list.delete_if { |v| !is_input_with_id?(v) }
 			list.each do |v|
-				next unless !vertices.files[v].nil?
+				next unless !@files[v].nil?
 				Find.find '..' do |path|
-					if path.include? '/'+vertices.files[v]
-						inputs[path.gsub vertices.files[v], '']= path
+					if path.include? '/'+@files[v]
+						inputs[path.gsub @files[v], '']= path
 					end
 				end
       end
@@ -113,13 +153,69 @@ module Encapsulator
 		end
 
     def script output
-      vertices = Encapsulator::VertexCounter.new.read_json_file(@filename)
       script = Array.new
-      vertices.libraries.each do |k, v|
+      @libraries.each do |k, v|
         script << v
       end
-      statements = source_code output, vertices
+      statements = source_code output
       script << statements unless statements.empty?
+    end
+
+    def show
+      file_show
+			puts "\n\n"
+      packages_show
+    end
+
+    def file_show
+      puts 'Files'
+			puts '-----'
+      @files.each do |key, value|
+        if is_input? value
+					puts "Input #{value}"
+				else
+					puts "Output #{value}"
+				end
+      end
+    end
+
+		def packages_show
+      puts 'Packages'
+			puts '--------'
+			@packages.each do |key, value|
+				if !['datasets', 'utils', 'graphics', 'grDevices', 'methods', 'stats', 'RDataTracker', 'devtools'].include?(key)
+        	puts "#{key} v#{value}"
+        end
+			end
+		end
+
+    def is_input? file_name
+			source_code(file_name).empty?
+		end
+
+		def is_input_with_id? id
+			@files.each do |key, value|
+        if id == key
+					if is_input? value
+						return true
+					end
+				end
+      end
+			return false
+		end
+
+    def install
+      instructions = Array.new
+      @packages.each do |key, value|
+        if key == 'base'
+          instructions << "  sudo dnf -y -v install R-#{value}"
+	        instructions << "  sudo dnf -y -v install R"
+          instructions << "  sudo su - -c \"R -e \\\\\\\"install.packages(\'devtools\', repos=\'http://cran.rstudio.com/\', dependencies = TRUE)\\\\\\\"\""
+        elsif !['datasets', 'utils', 'graphics', 'grDevices', 'methods', 'stats', 'RDataTracker', 'devtools'].include?(key)
+          instructions << "  sudo su - -c \"R -e \\\\\\\"require('devtools');install_version(\'#{key}\', version=\'#{value}\', repos=\'http://cran.rstudio.com/\')\\\\\\\"\""
+        end
+      end
+      return instructions
     end
   end
 end

@@ -45,7 +45,7 @@ module Encapsulator
 
     def CLI.encapsulate capsule_name, source
     	RDataTracker.run_script source do
-    		v = Encapsulator::VertexCounter.new.read_json_file('ddg.json')
+    		v = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json')
     		system 'mkdir', '-p', '../.'+capsule_name
     		Dir.chdir '../.'+capsule_name do
     			puts "In directory #{Dir.pwd}..."
@@ -108,8 +108,7 @@ module Encapsulator
 
     def CLI.info script
       RDataTracker.run_script script do
-    		rgl = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json')
-      	Encapsulator::VertexCounter.new.read_json_file('ddg.json').show rgl
+      	Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').show
     	end
     end
 
