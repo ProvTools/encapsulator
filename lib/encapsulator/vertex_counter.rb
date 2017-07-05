@@ -1,4 +1,4 @@
-module CodecleanR
+module Encapsulator
   class VertexCounter < ProvJSONParser
     attr_reader :map
     attr_reader :files

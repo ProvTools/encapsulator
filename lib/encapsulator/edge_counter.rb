@@ -1,4 +1,4 @@
-module CodecleanR
+module Encapsulator
   class EdgeCounter < ProvJSONParser
     attr_reader :map
 

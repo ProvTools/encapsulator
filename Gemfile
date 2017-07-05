@@ -1,4 +1,4 @@
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in codecleanR.gemspec
+# Specify your gem's dependencies in encapsulator.gemspec
 gemspec

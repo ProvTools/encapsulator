@@ -1,6 +1,6 @@
 require 'json'
 
-module CodecleanR
+module Encapsulator
   class ProvJSONParser
 		attr_reader :filename
 

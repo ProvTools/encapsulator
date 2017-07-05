@@ -1,4 +1,4 @@
-# CodecleanR
+# Encapsulator
 
 ## Installation
 
@@ -7,11 +7,11 @@
 ```
 sudo dnf install ruby
 gem install json rgl rake bundler
-git clone https://github.com/tfjmp/codecleanR.git
-cd codecleanR
+git clone https://github.com/tfjmp/encapsulator.git
+cd encapsulator
 rake install
-codecleanR --install fedora
-codecleanR -h
+encapsulator --install fedora
+encapsulator -h
 ```
 
 ### Ubuntu
@@ -19,11 +19,11 @@ codecleanR -h
 ```
 sudo apt install ruby
 gem install json rgl rake bundler
-git clone https://github.com/tfjmp/codecleanR.git
-cd codecleanR
+git clone https://github.com/tfjmp/encapsulator.git
+cd encapsulator
 rake install
-codecleanR --install ubuntu
-codecleanR -h
+encapsulator --install ubuntu
+encapsulator -h
 ```
 
 ### MacOS
@@ -31,18 +31,18 @@ codecleanR -h
 ```
 brew install ruby
 gem install json rgl rake bundler
-git clone https://github.com/tfjmp/codecleanR.git
-cd codecleanR
+git clone https://github.com/tfjmp/encapsulator.git
+cd encapsulator
 rake install
-codecleanR --install mac
-codecleanR -h
+encapsulator --install mac
+encapsulator -h
 ```
 
 ## USAGE
 
 ```
 # extract info from ddg.json
-codecleanR --info <your_RDT_prov.json>
+encapsulator --info <your_RDT_prov.json>
 # select an output node to generate the code to be generate
-codecleanR --code <your_RDT_prov.json> <output_node_id>
+encapsulator --code <your_RDT_prov.json> <output_node_name> <new R script>
 ```

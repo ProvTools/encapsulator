@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "codecleanR"
+require "encapsulator"
 
 def usage
   puts "USAGE\n\n"
@@ -56,7 +56,7 @@ end
 
 def encapsulate source, capsule_name
 	run_script source do
-		v = CodecleanR::VertexCounter.new.read_json_file('ddg.json')
+		v = Encapsulator::VertexCounter.new.read_json_file('ddg.json')
 		system 'mkdir', '-p', '../.'+capsule_name
 		Dir.chdir '../.'+capsule_name do
 			puts "In directory #{Dir.pwd}..."
@@ -99,7 +99,7 @@ end
 def source_code source, target_output, destination
 	script = nil
 	run_script source do
-		script = CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json').script target_output
+		script = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').script target_output
 	end
 	if script.nil?
 		puts 'This is an input file.'
@@ -132,7 +132,7 @@ def script_inputs source, target_output, destination
 	inputs = nil
 	destination = '../'+destination
 	run_script source do
-		inputs = CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json').script_inputs target_output
+		inputs = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').script_inputs target_output
 		puts inputs
 		inputs.each do |path, file|
 			next unless !file.include? destination
@@ -148,8 +148,8 @@ end
 
 if ARGV[0] == '--info'
 	run_script ARGV[1] do
-		rgl = CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json')
-  	CodecleanR::VertexCounter.new.read_json_file('ddg.json').show rgl
+		rgl = Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json')
+  	Encapsulator::VertexCounter.new.read_json_file('ddg.json').show rgl
 	end
 elsif ARGV[0] == '--encapsulate'
 	system 'rm', '-rf', '.'+ARGV[2]
@@ -167,20 +167,22 @@ elsif ARGV[0] == '--decapsulate'
   decapsulate ARGV[1]
 elsif ARGV[0] == '--jpg'
 	run_script ARGV[1] do
-		CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json').jpg
+		Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').jpg
 	end
 elsif ARGV[0] == '--png'
 	run_script ARGV[1] do
-		CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json').png
+		Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').png
 	end
 elsif ARGV[0] == '--svg'
 	run_script ARGV[1] do
-		CodecleanR::ProvJSONtoRGL.new.read_json_file('ddg.json').svg
+		Encapsulator::ProvJSONtoRGL.new.read_json_file('ddg.json').svg
 	end
 elsif ARGV[0] == '--code'
 	source_code ARGV[1], ARGV[2], ARGV[3]
 elsif ARGV[0] == '--run'
 	run ARGV[1]
+elsif ARGV[0] == '--version'
+	puts Encapsulator::VERSION
 elsif ARGV[0] == '--install'
 	if ARGV[1] == 'fedora'
     install_fedora

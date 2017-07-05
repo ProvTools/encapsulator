@@ -4,7 +4,7 @@ require 'rgl/topsort'
 require 'rgl/transitivity'
 require 'rgl/traversal'
 
-module CodecleanR
+module Encapsulator
   class ProvJSONtoRGL < ProvJSONParser
     attr_reader :dg
 
@@ -97,7 +97,7 @@ module CodecleanR
 
 		def script_inputs file
 			inputs = Hash.new
-			vertices = CodecleanR::VertexCounter.new.read_json_file(@filename)
+			vertices = Encapsulator::VertexCounter.new.read_json_file(@filename)
 			list = get_list file, vertices
 			list.delete_if { |v| !vertices.is_input_with_id(self, v) }
 			list.each do |v|
@@ -112,7 +112,7 @@ module CodecleanR
 		end
 
     def script output
-      vertices = CodecleanR::VertexCounter.new.read_json_file(@filename)
+      vertices = Encapsulator::VertexCounter.new.read_json_file(@filename)
       script = Array.new
       vertices.libraries.each do |k, v|
         script << v

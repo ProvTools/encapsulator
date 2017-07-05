@@ -1,0 +1,6 @@
+require "find"
+require "encapsulator/version"
+require "encapsulator/provjson_parser"
+require "encapsulator/edge_counter"
+require "encapsulator/vertex_counter"
+require "encapsulator/provjson_to_rgl"
