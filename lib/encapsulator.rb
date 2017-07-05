@@ -1,7 +1,7 @@
-require "encapsulator/version"
-require "encapsulator/provjson_parser"
-require "encapsulator/vertex_counter"
-require "encapsulator/provjson_to_rgl"
-require "encapsulator/installer"
-require "encapsulator/rdatatracker"
-require "encapsulator/cli"
+require 'encapsulator/version'
+require 'encapsulator/provjson_parser'
+require 'encapsulator/vertex_counter'
+require 'encapsulator/provjson_to_rgl'
+require 'encapsulator/installer'
+require 'encapsulator/rdatatracker'
+require 'encapsulator/cli'
