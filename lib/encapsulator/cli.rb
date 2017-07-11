@@ -78,7 +78,7 @@ module Encapsulator
     		script = Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').script target_output
     	end
     	if script.nil?
-    		puts 'This is an input file.'
+    		abort "#{target_output} is not a valid output file."
     	else
     		File.open(destination, "w+") do |f|
     			f.puts(script)
