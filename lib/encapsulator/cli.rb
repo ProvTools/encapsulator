@@ -6,7 +6,7 @@ module Encapsulator
       puts '--jpg <path to R script> output graph as jpg'
       puts '--png <path to R script> output graph as png'
       puts '--svg <path to R script> output graph as svg'
-      puts '--code <path to R script> <output name> <dest> output code needed to generate the output in dest'
+      puts '--code <path to R script> <output> [output] ... [output] create the source necessary to generate the specified output'
       puts '--run <path to R script> run the provided r script'
     	puts '--encapsulate <user>/<project> <script> <output> [output] ... [output] create the specified capsule'
     	puts '--decapsulate <user>/<project> download the coresponding capsule'
@@ -117,12 +117,10 @@ module Encapsulator
     	destination = '../'+destination
     	RDataTracker.run_script script do
     		inputs = Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').script_inputs target_output
-    		puts inputs
     		inputs.each do |path, file|
     			next unless !file.include? destination
     			dest_path = path.gsub '..', destination
     			dest = file.gsub '..', destination
-    			puts file, dest
     			system 'mkdir', '-p', dest_path
     			system 'cp', '-f', file, dest
     			puts "Saved input #{dest} for script #{target_output}.R"

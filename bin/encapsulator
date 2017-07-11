@@ -26,7 +26,18 @@ elsif ARGV[0] == '--png'
 elsif ARGV[0] == '--svg'
   Encapsulator::CLI::get_svg ARGV[1]
 elsif ARGV[0] == '--code'
-	Encapsulator::CLI::source_code ARGV[1], ARGV[2], ARGV[3]
+	out_path = '.encapsulator'
+	system 'rm', '-rf', out_path
+	system 'mkdir', '-p', out_path
+	for i in 2..ARGV.size
+		break unless !ARGV[i].nil?
+		out_name = out_path+'/'+ARGV[i]+'.R'
+		Encapsulator::CLI::source_code ARGV[1], ARGV[i], out_name
+    Encapsulator::RDataTracker.tidy out_name
+		Encapsulator::CLI::script_inputs ARGV[1], ARGV[i], out_path
+		puts "Generated script for output #{ARGV[i]}"
+	end
+	puts 'Scripts written in '+File.expand_path(out_path)
 elsif ARGV[0] == '--run'
 	Encapsulator::RDataTracker::run ARGV[1]
 elsif ARGV[0] == '--version'
