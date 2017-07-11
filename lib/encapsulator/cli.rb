@@ -36,7 +36,7 @@ module Encapsulator
       provision << "  "+'sudo dnf -y -v install ./atom.rpm'
       provision << "  "+'rm -rf ./atom.rpm'
       provision << install_instructions
-    	provision << " "+'https://download1.rstudio.org/rstudio-1.0.143-x86_64.rpm'
+    	provision << " "+'wget https://download1.rstudio.org/rstudio-1.0.143-x86_64.rpm'
     	provision << "  "+'sudo dnf -y -v install ./rstudio-1.0.143-x86_64.rpm'
     	provision << "  "+'rm -rf ./rstudio-1.0.143-x86_64.rpm'
       provision << 'SHELL'
