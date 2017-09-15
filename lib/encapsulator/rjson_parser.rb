@@ -112,18 +112,21 @@ module Encapsulator
     end
 
     def svg
-      Dir.chdir('..')
-      @dg.write_to_graphic_file('svg')
+      Dir.chdir('..') do
+        @dg.write_to_graphic_file('svg')
+      end
     end
 
     def jpg
-      Dir.chdir('..')
-      @dg.write_to_graphic_file('jpg')
+      Dir.chdir('..') do
+        @dg.write_to_graphic_file('jpg')
+      end
     end
 
     def png
-      Dir.chdir('..')
-      @dg.write_to_graphic_file('png')
+      Dir.chdir('..') do
+        @dg.write_to_graphic_file('png')
+      end
     end
 
 		def get_list file
