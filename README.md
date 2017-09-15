@@ -4,7 +4,13 @@
 
 ## Installation
 
-### Fedora 25
+```
+gem install encapsulator
+```
+
+###From source
+
+#### Fedora 25
 
 ```
 sudo dnf install ruby
@@ -16,7 +22,7 @@ encapsulator --install fedora
 encapsulator -h
 ```
 
-### Ubuntu
+#### Ubuntu
 
 ```
 sudo apt install ruby
@@ -28,7 +34,7 @@ encapsulator --install ubuntu
 encapsulator -h
 ```
 
-### MacOS
+#### MacOS
 
 ```
 brew install ruby
