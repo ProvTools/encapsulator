@@ -17,6 +17,7 @@ elsif ARGV[0] == '--encapsulate'
 		puts "Generated script for output #{ARGV[i]}"
 	end
 	Encapsulator::CLI::encapsulate ARGV[1], ARGV[2]
+	puts 'WARNING: We are sorry due to remote API change, capsule need to be manually uploaded to: https://app.vagrantup.com'
 elsif ARGV[0] == '--decapsulate'
   decapsulate ARGV[1]
 elsif ARGV[0] == '--jpg'
