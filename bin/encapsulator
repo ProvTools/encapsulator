@@ -12,7 +12,7 @@ elsif ARGV[0] == '--encapsulate'
 		break unless !ARGV[i].nil?
 		out_name = '.'+ARGV[1]+'/workspace/'+ARGV[i]+'.R'
 		Encapsulator::CLI::source_code ARGV[2], ARGV[i], out_name
-    Encapsulator::RDataTracker.tidy out_name
+    Encapsulator::ProvR.tidy out_name
 		Encapsulator::CLI::script_inputs ARGV[2], ARGV[i], out_path
 		puts "Generated script for output #{ARGV[i]}"
 	end
@@ -33,13 +33,13 @@ elsif ARGV[0] == '--code'
 		break unless !ARGV[i].nil?
 		out_name = out_path+'/'+ARGV[i]+'.R'
 		Encapsulator::CLI::source_code ARGV[1], ARGV[i], out_name
-    Encapsulator::RDataTracker.tidy out_name
+    Encapsulator::ProvR.tidy out_name
 		Encapsulator::CLI::script_inputs ARGV[1], ARGV[i], out_path
 		puts "Generated script for output #{ARGV[i]}"
 	end
 	puts 'Scripts written in '+File.expand_path(out_path)
 elsif ARGV[0] == '--run'
-	Encapsulator::RDataTracker::run ARGV[1]
+	Encapsulator::ProvR::run ARGV[1]
 elsif ARGV[0] == '--version'
 	puts Encapsulator::VERSION
 elsif ARGV[0] == '--install'

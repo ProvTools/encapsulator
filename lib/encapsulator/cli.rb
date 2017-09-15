@@ -44,7 +44,7 @@ module Encapsulator
     end
 
     def CLI.encapsulate capsule_name, script
-    	RDataTracker.run_script script do
+    	ProvR.run_script script do
     		v = Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json')
     		system 'mkdir', '-p', '../.'+capsule_name
     		Dir.chdir '../.'+capsule_name do
@@ -74,7 +74,7 @@ module Encapsulator
     end
 
     def CLI.source_code script, target_output, destination
-    	RDataTracker.run_script script do
+    	ProvR.run_script script do
     		script = Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').script target_output
     	end
     	if script.nil?
@@ -83,31 +83,31 @@ module Encapsulator
     		File.open(destination, "w+") do |f|
     			f.puts(script)
     		end
-        RDataTracker.tidy destination
+        ProvR.tidy destination
     		puts "Script written to #{destination}"
     	end
     end
 
     def CLI.get_jpg script
-      RDataTracker.run_script script do
+      ProvR.run_script script do
     		Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').jpg
     	end
     end
 
     def CLI.get_png script
-      RDataTracker.run_script script do
+      ProvR.run_script script do
     		Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').png
     	end
     end
 
     def CLI.get_svg script
-      RDataTracker.run_script script do
+      ProvR.run_script script do
     		Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').svg
     	end
     end
 
     def CLI.info script
-      RDataTracker.run_script script do
+      ProvR.run_script script do
       	Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').show
     	end
     end
@@ -115,7 +115,7 @@ module Encapsulator
     def CLI.script_inputs script, target_output, destination
     	inputs = nil
     	destination = '../'+destination
-    	RDataTracker.run_script script do
+    	ProvR.run_script script do
     		inputs = Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').script_inputs target_output
     		inputs.each do |path, file|
     			next unless !file.include? destination

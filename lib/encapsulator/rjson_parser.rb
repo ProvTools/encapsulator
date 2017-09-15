@@ -195,7 +195,7 @@ module Encapsulator
       puts 'Packages'
 			puts '--------'
 			@packages.each do |key, value|
-				if !['datasets', 'utils', 'graphics', 'grDevices', 'methods', 'stats', 'RDataTracker', 'devtools'].include?(key)
+				if !['datasets', 'utils', 'graphics', 'grDevices', 'methods', 'stats', 'provR', 'devtools'].include?(key)
         	puts "#{key} v#{value}"
         end
 			end
@@ -223,7 +223,7 @@ module Encapsulator
           instructions << "  sudo dnf -y -v install R-#{value}"
 	        instructions << "  sudo dnf -y -v install R"
           instructions << "  sudo su - -c \"R -e \\\\\\\"install.packages(\'devtools\', repos=\'http://cran.rstudio.com/\', dependencies = TRUE)\\\\\\\"\""
-        elsif !['datasets', 'utils', 'graphics', 'grDevices', 'methods', 'stats', 'RDataTracker', 'devtools'].include?(key)
+        elsif !['datasets', 'utils', 'graphics', 'grDevices', 'methods', 'stats', 'provR', 'devtools'].include?(key)
           instructions << "  sudo su - -c \"R -e \\\\\\\"require('devtools');install_version(\'#{key}\', version=\'#{value}\', repos=\'http://cran.rstudio.com/\')\\\\\\\"\""
         end
       end
