@@ -110,14 +110,17 @@ module Encapsulator
     end
 
     def svg
+      Dir.chdir('..')
       @dg.write_to_graphic_file('svg')
     end
 
     def jpg
+      Dir.chdir('..')
       @dg.write_to_graphic_file('jpg')
     end
 
     def png
+      Dir.chdir('..')
       @dg.write_to_graphic_file('png')
     end
 
