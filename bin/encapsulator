@@ -2,7 +2,9 @@
 
 require "encapsulator"
 
-if ARGV[0] == '--info'
+if ARGV[0] == '-v' || ARGV[0] == '--version'
+	puts Encapsulator::VERSION
+elsif ARGV[0] == '--info'
 	Encapsulator::CLI::info ARGV[1]
 elsif ARGV[0] == '--encapsulate'
 	system 'rm', '-rf', '.'+ARGV[1]

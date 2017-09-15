@@ -2,6 +2,7 @@ module Encapsulator
   module CLI
     def CLI.usage
       puts "USAGE\n\n"
+      puts '--version display encapsulator version'
       puts '--info <path to R script> display information about the provenance graph'
       puts '--jpg [--all] <path to R script> output graph as jpg'
       puts '--png [--all] <path to R script> output graph as png'
