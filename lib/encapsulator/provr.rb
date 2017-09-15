@@ -7,7 +7,7 @@ module Encapsulator
     	r.eval "require('devtools')"
     	r.eval "install_github('provtools/provR', ref='dev')"
     	r.eval "require('provR')"
-      r.eval "ddg.run('#{script}')"
+      r.eval "prov.capture('#{script}', save=TRUE)"
     end
 
     def ProvR.tidy script
