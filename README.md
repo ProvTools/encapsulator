@@ -8,7 +8,7 @@
 gem install encapsulator
 ```
 
-###From source
+### From source
 
 #### Fedora 25
 
