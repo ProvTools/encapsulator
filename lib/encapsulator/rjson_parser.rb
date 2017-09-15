@@ -14,8 +14,9 @@ module Encapsulator
     attr_reader :libraries
     attr_reader :packages
     attr_reader :file
+    attr_reader :informed
 
-    def initialize r_file
+    def initialize r_file, informed=false
       @dg = RGL::DirectedAdjacencyGraph.new # initialise the graph structure
       @map = Hash.new(0)
       @files = Hash.new
@@ -24,6 +25,7 @@ module Encapsulator
       @libraries = Hash.new
       @packages = Hash.new
       @script = IO.readlines(r_file)
+      @informed = informed
     end
 
     def get_operation start_line, end_line
@@ -53,7 +55,7 @@ module Encapsulator
     end
 
     def wasInformedBy k, v
-      #@dg.add_edge v['prov:informed'], v['prov:informant']
+      @dg.add_edge v['prov:informed'], v['prov:informant'] unless !informed
     end
 
     def wasAssociatedWith k, v

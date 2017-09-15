@@ -88,21 +88,21 @@ module Encapsulator
     	end
     end
 
-    def CLI.get_jpg script
+    def CLI.get_jpg script, all=false
       ProvR.run_script script do
-    		Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').jpg
+    		Encapsulator::RJSONParser.new('../'+script, all).read_json_file('ddg.json').jpg
     	end
     end
 
-    def CLI.get_png script
+    def CLI.get_png script, all=false
       ProvR.run_script script do
-    		Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').png
+    		Encapsulator::RJSONParser.new('../'+script, all).read_json_file('ddg.json').png
     	end
     end
 
-    def CLI.get_svg script
+    def CLI.get_svg script, all=false
       ProvR.run_script script do
-    		Encapsulator::RJSONParser.new('../'+script).read_json_file('ddg.json').svg
+    		Encapsulator::RJSONParser.new('../'+script, all).read_json_file('ddg.json').svg
     	end
     end
 
