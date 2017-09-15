@@ -1,5 +1,7 @@
 # Encapsulator
 
+[![DOI](https://zenodo.org/badge/94570522.svg)](https://zenodo.org/badge/latestdoi/94570522)
+
 ## Installation
 
 ### Fedora 25
