@@ -3,9 +3,9 @@ module Encapsulator
     def CLI.usage
       puts "USAGE\n\n"
       puts '--info <path to R script> display information about the provenance graph'
-      puts '--jpg <path to R script> output graph as jpg'
-      puts '--png <path to R script> output graph as png'
-      puts '--svg <path to R script> output graph as svg'
+      puts '--jpg [--all] <path to R script> output graph as jpg'
+      puts '--png [--all] <path to R script> output graph as png'
+      puts '--svg [--all] <path to R script> output graph as svg'
       puts '--code <path to R script> <output> [output] ... [output] create the source necessary to generate the specified output'
       puts '--run <path to R script> run the provided r script'
     	puts '--encapsulate <user>/<project> <script> <output> [output] ... [output] create the specified capsule'
