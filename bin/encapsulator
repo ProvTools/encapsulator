@@ -44,7 +44,7 @@ elsif ARGV[0] == '--version'
 	puts Encapsulator::VERSION
 elsif ARGV[0] == '--install'
 	if ARGV[1] == 'fedora'
-    Encapsulator::Installer::install_fedora
+    Encapsulator::Installer.install_fedora
 	elsif ARGV[1] == 'ubuntu'
 		Encapsulator::Installer::install_ubuntu
 	elsif ARGV[1] == 'mac'
