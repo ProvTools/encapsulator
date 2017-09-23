@@ -8,10 +8,7 @@
 
 ```
 sudo dnf install ruby
-gem install json rgl rake bundler
-git clone https://github.com/tfjmp/encapsulator.git
-cd encapsulator
-rake install
+gem install encapsulator
 encapsulator --install fedora
 encapsulator -h
 ```
@@ -20,10 +17,7 @@ encapsulator -h
 
 ```
 sudo apt install ruby
-gem install json rgl rake bundler
-git clone https://github.com/tfjmp/encapsulator.git
-cd encapsulator
-rake install
+gem install encapsulator
 encapsulator --install ubuntu
 encapsulator -h
 ```
@@ -32,10 +26,7 @@ encapsulator -h
 
 ```
 brew install ruby
-gem install json rgl rake bundler
-git clone https://github.com/tfjmp/encapsulator.git
-cd encapsulator
-rake install
+gem install encapsulator
 encapsulator --install mac
 encapsulator -h
 ```
