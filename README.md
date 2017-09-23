@@ -34,8 +34,6 @@ encapsulator -h
 ## USAGE
 
 ```
-# extract info from ddg.json
-encapsulator --info <your_RDT_prov.json>
-# select an output node to generate the code to be generate
-encapsulator --code <your_RDT_prov.json> <output_node_name> <new R script>
+# see
+encapsulator -h
 ```
