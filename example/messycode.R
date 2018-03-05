@@ -16,6 +16,12 @@ source("sourced.R")
 ### typically, file paths are given from root.
 data.16 <- read.csv("projects/2016/july_biomass_survey.csv")
 
+### User defined functions
+myfunc <- function(x){
+    y <- x + 2
+    return(y)
+}
+
 ### Some datasets are loaded and no longer used.
 ### Like this one
 data.16.2 <- read.csv('projects/data_forestplot/dataset_v2_june_from_collaborator1.csv')
