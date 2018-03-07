@@ -1,6 +1,9 @@
+require 'fileutils'
+
 module Encapsulator
   module ProvR
     def ProvR.run script
+      FileUtils.mkdir_p './prov'
       require 'rinruby'
       r = RinRuby.new(echo: false)
       r.eval "chooseCRANmirror(ind=81)"
@@ -9,7 +12,7 @@ module Encapsulator
       r.eval "install_github('provtools/provR', ref='dev')"
       r.eval "require('provR')"
       r.eval "prov.capture('#{script}')"
-      r.eval "f <- file('prov.json')"
+      r.eval "f <- file('./prov/ddg.json')"
       r.eval "writeLines(prov.json(), f)"
       r.eval "close(f)"
     end
@@ -29,7 +32,7 @@ module Encapsulator
     		run script
     		$ran_script = true
     	end
-    	prov_folder = script.gsub('.R', '_ddg')
+    	prov_folder = './prov'
     	Dir.chdir prov_folder do
     		yield
     	end
