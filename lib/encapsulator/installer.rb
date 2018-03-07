@@ -4,6 +4,11 @@ module Encapsulator
       system 'wget', 'http://download.virtualbox.org/virtualbox/5.1.22/VirtualBox-5.1-5.1.22_115126_fedora25-1.x86_64.rpm', out: $stdout, err: $stdout
       system 'sudo', 'dnf', '-y', '-v', 'install', './VirtualBox-5.1-5.1.22_115126_fedora25-1.x86_64.rpm', out: $stdout, err: $stdout
       system 'sudo', 'dnf', '-y', '-v', 'install', 'vagrant', out: $stdout, err: $stdout
+      system 'sudo', 'dnf', '-y', '-v', 'install', 'openssl-devel', out: $stdout, err: $stdout
+      system 'sudo', 'dnf', '-y', '-v', 'install', 'libcurl-devel', out: $stdout, err: $stdout
+      system 'sudo', 'dnf', '-y', '-v', 'install', 'libxml-devel', out: $stdout, err: $stdout
+      system 'sudo', 'dnf', '-y', '-v', 'install', 'libxml2-devel', out: $stdout, err: $stdout
+      system 'sudo', 'dnf', '-y', '-v', 'install', 'R', out: $stdout, err: $stdout
     end
 
     def self.install_ubuntu
