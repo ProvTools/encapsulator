@@ -18,7 +18,7 @@ module Encapsulator
       provision << '# -*- mode: ruby -*-'
       provision << '# vi: set ft=ruby :'
       provision << 'Vagrant.configure(2) do |config|'
-      provision << "  "+'config.vm.box = "jhcook/fedora25"'
+      provision << "  "+'config.vm.box = "jhcook/fedora27"'
       provision << "  "+'config.vm.provider "virtualbox" do |vb|'
       provision << "  "+'vb.gui = true'
       provision << "  "+'vb.memory = 2048'
@@ -32,6 +32,7 @@ module Encapsulator
       provision << "  "+'sudo dnf -y -v install libcurl libcurl-devel'
       provision << "  "+'sudo dnf -y -v install perl-CPAN'
       provision << "  "+'sudo dnf -y -v install ruby'
+      provision << "  "+'sudo dnf -y -v install R'
       provision << "  "+'wget https://atom.io/download/rpm'
       provision << "  "+'mv ./rpm ./atom.rpm'
       provision << "  "+'sudo dnf -y -v install ./atom.rpm'
@@ -58,7 +59,7 @@ module Encapsulator
     			end
     			puts 'Provision script is ready...'
     			puts 'getting your capsule ready, be patient...'
-    			system("vagrant", "up", out: $stdout, err: $stdout)
+    			system("vagrant", "up", "--provider", "virtualbox", out: $stdout, err: $stdout)
     			system("vagrant", "halt", out: $stdout, err: $stdout)
     		end
     		puts 'Your capsule should be visible in the virtualbox interface.'
@@ -69,7 +70,7 @@ module Encapsulator
     	puts "looking for the capsule #{vm}..."
     	system("vagrant", "init", capsule_name, out: $stdout, err: $stdout)
     	puts 'getting your capsule ready, be patient...'
-    	system("vagrant", "up", out: $stdout, err: $stdout)
+    	system("vagrant", "up", "--provider", "virtualbox", out: $stdout, err: $stdout)
     	system("vagrant", "halt", out: $stdout, err: $stdout)
     	puts 'you should find your capsule in the virtualbox GUI.'
     end
