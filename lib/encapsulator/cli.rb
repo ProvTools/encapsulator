@@ -17,8 +17,10 @@ module Encapsulator
       provision = Array.new
       provision << '# -*- mode: ruby -*-'
       provision << '# vi: set ft=ruby :'
+      # redirect from atlas
+      provision << "Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')"
       provision << 'Vagrant.configure(2) do |config|'
-      provision << "  "+'config.vm.box = "jhcook/fedora25"'
+      provision << "  "+'config.vm.box = "jhcook/fedora27"'
       provision << "  "+'config.vm.provider "virtualbox" do |vb|'
       provision << "  "+'vb.gui = true'
       provision << "  "+'vb.memory = 2048'
