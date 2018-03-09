@@ -4,6 +4,12 @@
 
 ## Installation
 
+```
+gem install encapsulator
+```
+
+## Building from source
+
 ### Fedora 25
 
 ```

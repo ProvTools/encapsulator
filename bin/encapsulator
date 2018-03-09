@@ -2,7 +2,9 @@
 
 require "encapsulator"
 
-if ARGV[0] == '--info'
+if ARGV[0] == '-v' || ARGV[0] == '--version'
+	puts Encapsulator::VERSION
+elsif ARGV[0] == '--info'
 	Encapsulator::CLI::info ARGV[1]
 elsif ARGV[0] == '--encapsulate'
 	system 'rm', '-rf', '.'+ARGV[1]
@@ -21,11 +23,23 @@ elsif ARGV[0] == '--encapsulate'
 elsif ARGV[0] == '--decapsulate'
   decapsulate ARGV[1]
 elsif ARGV[0] == '--jpg'
-  Encapsulator::CLI::get_jpg ARGV[1]
+	if ARGV[1] == '--all'
+		Encapsulator::CLI::get_jpg ARGV[2], true
+	else
+		Encapsulator::CLI::get_jpg ARGV[1]
+	end
 elsif ARGV[0] == '--png'
-  Encapsulator::CLI::get_png ARGV[1]
+	if ARGV[1] == '--all'
+		Encapsulator::CLI::get_png ARGV[2], true
+	else
+		Encapsulator::CLI::get_png ARGV[1]
+	end
 elsif ARGV[0] == '--svg'
-  Encapsulator::CLI::get_svg ARGV[1]
+	if ARGV[1] == '--all'
+		Encapsulator::CLI::get_svg ARGV[2], true
+	else
+		Encapsulator::CLI::get_svg ARGV[1]
+	end
 elsif ARGV[0] == '--code'
 	out_path = '.encapsulator'
 	system 'rm', '-rf', out_path
