@@ -2,6 +2,23 @@
 
 [![DOI](https://zenodo.org/badge/94570522.svg)](https://zenodo.org/badge/latestdoi/94570522)
 
+Create a capsule that preserves a scientific experiment with
+*encapsulator*.
+
+The *encapsulator* software takes language specific provenance
+collected for an analysis and uses it to extract the essential data,
+dependencies and code needed to create a set of results, such as
+figures or tables used in a manuscript.
+
+Given the provenance and a list of results, *encapsulator* will
+extract the essentials and package them up as a Virtual Machine that
+will run on any system that can run VirtualBox. 
+
+You can read more about data provenance and provenance powered
+software at
+[provenance@harvard](https://projects.iq.harvard.edu/provenance-at-harvard/home).
+
+
 ## Installation
 
 ```
@@ -52,3 +69,4 @@ $ encapsulator -h
 --encapsulate <user>/<project> <script> <output> [output] ... [output] create the specified capsule
 --decapsulate <user>/<project> download the coresponding capsule
 ```
+
